@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GenZ Login</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            overflow: hidden;
+        }
+
+        .card {
+            width: 360px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: 0.25s;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.35);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #00e1ff, #0078ff);
+            color: black;
+            transition: 0.2s;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.35);
+        }
+
+        button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+        }
+
+        .toggle {
+            margin-top: 15px;
+            text-align: center;
+            color: #ffffffc7;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle:hover {
+            color: white;
+            text-shadow: 0 0 10px white;
+        }
+
+        .error {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: rgb(255, 102, 102);
+        }
+
+        /* Floating blobs */
+        .blob {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.45;
+            animation: float 8s infinite ease-in-out alternate;
+        }
+
+        #blob1 {
+            background: #ff00ff;
+            top: -10%;
+            left: -10%;
+        }
+
+        #blob2 {
+            background: #00e1ff;
+            bottom: -10%;
+            right: -10%;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            100% {
+                transform: translateY(60px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="blob1" class="blob"></div>
+    <div id="blob2" class="blob"></div>
+
+    <div class="card">
+
+        <!-- SIGN IN -->
+        <div id="signin">
+            <h2>Sign In</h2>
+
+            <input id="loginEmail" type="email" placeholder="Email" />
+            <input id="loginPassword" type="password" placeholder="Password" />
+
+            <button onclick="login()">Login</button>
+
+            <p id="loginError" class="error"></p>
+
+            <p class="toggle" onclick="showSignup()">No account? Sign up</p>
+        </div>
+
+        <!-- SIGN UP -->
+        <div id="signup" style="display:none;">
+            <h2>Create Account</h2>
+
+            <input id="signupEmail" type="email" placeholder="Email" />
+            <input id="signupPassword" type="password" placeholder="Password" />
+            <input id="signupConfirm" type="password" placeholder="Confirm Password" />
+
+            <button onclick="signup()">Sign Up</button>
+
+            <p id="signupError" class="error"></p>
+
+            <p class="toggle" onclick="showSignin()">Already a member? Sign in</p>
+        </div>
+
+    </div>
+
+    <script>
+        function showSignup() {
+            document.getElementById("signin").style.display = "none";
+            document.getElementById("signup").style.display = "block";
+        }
+
+        function showSignin() {
+            document.getElementById("signup").style.display = "none";
+            document.getElementById("signin").style.display = "block";
+        }
+
+        function signup() {
+            const email = document.getElementById("signupEmail").value.trim();
+            const pass = document.getElementById("signupPassword").value.trim();
+            const confirm = document.getElementById("signupConfirm").value.trim();
+            const error = document.getElementById("signupError");
+
+            if (!email || !pass || !confirm) {
+                error.textContent = "Complete all fields.";
+                return;
+            }
+
+            if (pass !== confirm) {
+                error.textContent = "Passwords don't match.";
+                return;
+            }
+
+            const user = { email: email, password: pass };
+            localStorage.setItem("userAccount", JSON.stringify(user));
+
+            error.textContent = "";
+            alert("Account created successfully!");
+            showSignin();
+        }
+
+        function login() {
+            const email = document.getElementById("loginEmail").value.trim();
+            const pass = document.getElementById("loginPassword").value.trim();
+            const error = document.getElementById("loginError");
+
+            const savedUser = JSON.parse(localStorage.getItem("userAccount"));
+
+            if (!savedUser) {
+                error.textContent = "No account found.";
+                return;
+            }
+
+            if (email === savedUser.email && pass === savedUser.password) {
+                localStorage.setItem("loggedIn", "true");
+                error.textContent = "";
+                window.location.href = "dashboard.html";
+            } else {
+                error.textContent = "Wrong email or password.";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
